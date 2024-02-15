@@ -16,7 +16,7 @@ jobs:
 
       - name: Set up SSH keys
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key
+          echo "$PRIVATE_KEY" > private_key
           chmod 600 private_key
 
       - name: SSH into server
@@ -24,5 +24,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key $USER_NAME@$HOSTNAME
         env:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          HOSTNAME: ${{ secrets.HOSTNAME }}
+          HOSTNAME: ${{ secrets.HOST_NAME }}
           USER_NAME: ${{ secrets.USER_NAME }}
+    
