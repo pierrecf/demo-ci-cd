@@ -11,9 +11,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
-
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Set up SSH key and deploy
+        run: |
+          echo "$PRIVATE_KEY" > private_key
+          chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key $USER_NAME@$HOSTNAME << EOF
+            # Commands to execute on the remote server after SSH connection
+            # For example:
+            # cd /path/to/your/application
+            # git pull origin main
+            # ./deploy.sh
+          EOF
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOSTNAME: ${{ secrets.HOSTNAME }}
+          USER_NAME: ${{ secrets.USER_NAME }}
