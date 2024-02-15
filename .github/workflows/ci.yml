@@ -19,12 +19,9 @@ jobs:
           echo "$PRIVATE_KEY" > private_key
           chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key $USER_NAME@$HOSTNAME << EOF
-            # Commands to execute on the remote server after SSH connection
-            # For example:
-            # cd /path/to/your/application
-            # git pull origin main
-            # ./deploy.sh
-            docker ps
+            cd /Klockan-Keycloak
+            docker-compose pull
+            docker-compose up -d
           EOF
         env:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
